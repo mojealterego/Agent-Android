@@ -1,9 +1,24 @@
 {
   "name": "@agent-android/mcp-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "scripts": {"dev":"tsx src/main.ts","start":"node dist/main.js","build":"tsc -p tsconfig.json","typecheck":"tsc --noEmit","test":"echo \\"No tests yet\\""},
-  "dependencies": {"@modelcontextprotocol/server":"latest","zod":"latest"},
-  "devDependencies": {"@types/node":"latest","tsx":"latest","typescript":"latest"}
+  "scripts": {
+    "dev": "tsx src/main.ts",
+    "start": "node dist/main.js",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "latest",
+    "@modelcontextprotocol/node": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
 }
