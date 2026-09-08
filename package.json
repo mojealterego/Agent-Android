@@ -1,0 +1,14 @@
+{
+  "name": "agent-android",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Modular Android AI agent platform with MCP, Skills and plugin packaging.",
+  "workspaces": ["apps/mobile", "services/agent-api", "services/mcp-server", "packages/shared"],
+  "scripts": {
+    "typecheck": "npm run typecheck -ws --if-present",
+    "lint": "npm run lint -ws --if-present",
+    "test": "npm run test -ws --if-present",
+    "build": "npm run build -ws --if-present"
+  },
+  "engines": {"node": ">=20"}
+}
