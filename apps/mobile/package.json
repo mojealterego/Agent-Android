@@ -1,9 +1,27 @@
 {
   "name": "@agent-android/mobile",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "main": "expo-router/entry",
-  "scripts": {"start":"expo start","android":"expo start --android","typecheck":"tsc --noEmit","lint":"eslint ."},
-  "dependencies": {"expo":"latest","expo-router":"latest","expo-status-bar":"latest","react":"latest","react-native":"latest","react-native-safe-area-context":"latest","react-native-screens":"latest","@tanstack/react-query":"latest"},
-  "devDependencies": {"@types/react":"latest","typescript":"latest","eslint":"latest"}
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@tanstack/react-query": "latest",
+    "expo": "latest",
+    "expo-router": "latest",
+    "expo-status-bar": "latest",
+    "react": "latest",
+    "react-native": "latest",
+    "react-native-safe-area-context": "latest",
+    "react-native-screens": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "eslint": "latest",
+    "typescript": "latest"
+  }
 }
