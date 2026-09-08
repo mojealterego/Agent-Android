@@ -1,22 +1,23 @@
 {
   "name": "agent-android",
-  "version": "0.1.0",
-  "description": "Agent Android: modular AI agent workflows, MCP tools, and reusable Skills.",
+  "version": "0.2.0",
+  "description": "Agent Android: production-oriented agent workflows, MCP tools, reusable Skills, secure runtime boundaries and Android delivery.",
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "apps": "./.app.json",
   "license": "MIT",
-  "keywords": ["agent", "android", "mcp", "skills", "automation"],
+  "keywords": ["agent", "android", "ai", "mcp", "skills", "automation", "orchestration"],
   "interface": {
     "displayName": "Agent Android",
-    "shortDescription": "AI agent platform for Android",
-    "longDescription": "A modular Agent Android package combining reusable Skills with a focused MCP tool server.",
+    "shortDescription": "Production AI agent platform for Android",
+    "longDescription": "A modular agent platform combining an Android client, secure agent runtime, focused MCP tools and reusable Skills with explicit authorization, approval and observability boundaries.",
     "developerName": "fotografandrzejmikulski-bit",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "defaultPrompt": [
-      "Use Agent Android to break a complex goal into verifiable steps.",
-      "Use Agent Android tools only within their authorization and approval boundaries."
+      "Use Agent Android to turn a complex goal into a verifiable execution plan.",
+      "Use only the minimum tools required and respect authorization and approval boundaries.",
+      "Report evidence, completed actions and unresolved constraints explicitly."
     ]
   }
 }
