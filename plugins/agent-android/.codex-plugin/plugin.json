@@ -1,0 +1,22 @@
+{
+  "name": "agent-android",
+  "version": "0.1.0",
+  "description": "Agent Android: modular AI agent workflows, MCP tools, and reusable Skills.",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "apps": "./.app.json",
+  "license": "MIT",
+  "keywords": ["agent", "android", "mcp", "skills", "automation"],
+  "interface": {
+    "displayName": "Agent Android",
+    "shortDescription": "AI agent platform for Android",
+    "longDescription": "A modular Agent Android package combining reusable Skills with a focused MCP tool server.",
+    "developerName": "fotografandrzejmikulski-bit",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Use Agent Android to break a complex goal into verifiable steps.",
+      "Use Agent Android tools only within their authorization and approval boundaries."
+    ]
+  }
+}
