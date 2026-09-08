@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Agent Android",
+    "slug": "agent-android",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "scheme": "agentandroid",
+    "android": {
+      "package": "com.fotografandrzejmikulski.agentandroid",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon-foreground.png",
+        "backgroundColor": "#0B0F19"
+      }
+    },
+    "plugins": ["expo-router"],
+    "experiments": {"typedRoutes": true}
+  }
+}
