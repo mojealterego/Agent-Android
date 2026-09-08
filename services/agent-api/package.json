@@ -1,0 +1,9 @@
+{
+  "name": "@agent-android/agent-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {"dev":"tsx src/index.ts","start":"node dist/index.js","build":"tsc -p tsconfig.json","typecheck":"tsc --noEmit","test":"vitest run"},
+  "dependencies": {"hono":"latest","zod":"latest","@hono/node-server":"latest"},
+  "devDependencies": {"@types/node":"latest","tsx":"latest","typescript":"latest","vitest":"latest"}
+}
