@@ -7,11 +7,7 @@
     "userInterfaceStyle": "automatic",
     "scheme": "agentandroid",
     "android": {
-      "package": "com.fotografandrzejmikulski.agentandroid",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icon-foreground.png",
-        "backgroundColor": "#0B0F19"
-      }
+      "package": "com.fotografandrzejmikulski.agentandroid"
     },
     "plugins": ["expo-router"],
     "experiments": {"typedRoutes": true}
