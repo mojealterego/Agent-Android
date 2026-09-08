@@ -1,0 +1,6 @@
+{
+  "agent_android": {
+    "command": "node",
+    "args": ["${PLUGIN_ROOT}/../../services/mcp-server/dist/index.js"]
+  }
+}
