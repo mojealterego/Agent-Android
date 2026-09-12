@@ -43,6 +43,12 @@ describe('agent API security contract', () => {
     expect(response.status).toBe(401);
   });
 
+  it('fails closed when session verification is not configured', async () => {
+    delete process.env.AUTH_SESSION_SECRET;
+    const response = await ask({ token: 'anything' });
+    expect(response.status).toBe(503);
+  });
+
   it('rejects malformed sessions', async () => {
     const response = await ask({ token: 'invalid-token' });
     expect(response.status).toBe(401);
