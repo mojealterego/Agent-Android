@@ -8,6 +8,8 @@ const app = new Hono();
 const AskSchema = z.object({
   message: z.string().trim().min(1).max(20_000),
   conversationId: z.string().trim().min(1).max(128).optional(),
+  organizationId: z.string().trim().min(1).max(128),
+  actorId: z.string().trim().min(1).max(128),
   metadata: z.record(z.string(), z.string()).optional(),
 });
 
@@ -39,9 +41,16 @@ app.post('/v1/agent/ask', async (c) => {
     }, 400);
   }
 
+  const { organizationId, actorId } = parsed.data;
   const conversationId = parsed.data.conversationId ?? crypto.randomUUID();
   const requestId = crypto.randomUUID();
   const startedAt = Date.now();
+
+  // P0 security boundary: these identifiers are required by the contract.
+  // They must be bound to an authenticated server-side session before any
+  // privileged tool is introduced. Do not treat client-supplied IDs as proof
+  // of identity or organization membership.
+  const executionContext = { organizationId, actorId, requestId };
 
   try {
     const result = await run(agent, parsed.data.message);
@@ -53,6 +62,7 @@ app.post('/v1/agent/ask', async (c) => {
       status: 'completed',
       output: result.finalOutput,
       latencyMs,
+      executionContext,
       metadata: parsed.data.metadata ?? {},
     });
   } catch (error) {
@@ -60,6 +70,8 @@ app.post('/v1/agent/ask', async (c) => {
     console.error(JSON.stringify({
       event: 'agent_request_failed',
       requestId,
+      organizationId,
+      actorId,
       conversationId,
       latencyMs,
       error: error instanceof Error ? error.message : 'unknown_error',
