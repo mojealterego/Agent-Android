@@ -2,14 +2,15 @@ import { serve } from '@hono/node-server';
 import { Agent, run } from '@openai/agents';
 import { Hono } from 'hono';
 import { z } from 'zod';
+import { readBearerToken, verifySessionToken } from './session.js';
 
 const app = new Hono();
 
 const AskSchema = z.object({
   message: z.string().trim().min(1).max(20_000),
   conversationId: z.string().trim().min(1).max(128).optional(),
-  organizationId: z.string().trim().min(1).max(128),
-  actorId: z.string().trim().min(1).max(128),
+  organizationId: z.string().trim().min(1).max(128).optional(),
+  actorId: z.string().trim().min(1).max(128).optional(),
   metadata: z.record(z.string(), z.string()).optional(),
 });
 
@@ -30,6 +31,39 @@ app.get('/health', (c) =>
 );
 
 app.post('/v1/agent/ask', async (c) => {
+  const authorization = c.req.header('authorization');
+  const token = readBearerToken(authorization);
+
+  if (!token) {
+    return c.json({
+      error: {
+        code: 'AUTHENTICATION_REQUIRED',
+        message: 'A valid bearer session is required.',
+      },
+    }, 401);
+  }
+
+  const secret = process.env.AUTH_SESSION_SECRET;
+  if (!secret) {
+    console.error(JSON.stringify({ event: 'auth_not_configured' }));
+    return c.json({
+      error: {
+        code: 'AUTH_NOT_CONFIGURED',
+        message: 'Authentication is not configured on the server.',
+      },
+    }, 503);
+  }
+
+  const session = verifySessionToken(token, secret);
+  if (!session) {
+    return c.json({
+      error: {
+        code: 'INVALID_SESSION',
+        message: 'The session is invalid or expired.',
+      },
+    }, 401);
+  }
+
   const parsed = AskSchema.safeParse(await c.req.json().catch(() => null));
   if (!parsed.success) {
     return c.json({
@@ -41,16 +75,26 @@ app.post('/v1/agent/ask', async (c) => {
     }, 400);
   }
 
-  const { organizationId, actorId } = parsed.data;
+  if (
+    (parsed.data.actorId && parsed.data.actorId !== session.actorId) ||
+    (parsed.data.organizationId && parsed.data.organizationId !== session.organizationId)
+  ) {
+    return c.json({
+      error: {
+        code: 'TENANT_CONTEXT_MISMATCH',
+        message: 'The requested actor or organization does not match the authenticated session.',
+      },
+    }, 403);
+  }
+
+  const { organizationId, actorId, sessionId } = session;
   const conversationId = parsed.data.conversationId ?? crypto.randomUUID();
   const requestId = crypto.randomUUID();
   const startedAt = Date.now();
 
-  // P0 security boundary: these identifiers are required by the contract.
-  // They must be bound to an authenticated server-side session before any
-  // privileged tool is introduced. Do not treat client-supplied IDs as proof
-  // of identity or organization membership.
-  const executionContext = { organizationId, actorId, requestId };
+  // P0 security boundary: tenant and actor context are derived from the
+  // verified server-side session, never trusted from the request body.
+  const executionContext = { organizationId, actorId, sessionId };
 
   try {
     const result = await run(agent, parsed.data.message);
@@ -72,6 +116,7 @@ app.post('/v1/agent/ask', async (c) => {
       requestId,
       organizationId,
       actorId,
+      sessionId,
       conversationId,
       latencyMs,
       error: error instanceof Error ? error.message : 'unknown_error',
